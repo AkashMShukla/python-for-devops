@@ -11,18 +11,13 @@ app = Flask(__name__)
 # Define a route that handles GET requests
 @app.route('/createJira', methods=['POST']) #This is a Decorator; This tells flask Run this function createJira() when someone opens /createJira URL.
 def createJira():
-
     url = "https://akashshukla.atlassian.net/rest/api/3/issue"
-
     API_TOKEN=""
-
     auth = HTTPBasicAuth("", API_TOKEN)
-
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
     }
-
     payload = json.dumps( {
         "fields": {
         "description": {
@@ -50,18 +45,14 @@ def createJira():
     },
     "update": {}
     } )
-
-
-    response = requests.request(
+    response = requests.request(   #we are sending Jira API Request
         "POST",
         url,
         data=payload,
         headers=headers,
         auth=auth
     )
-
-    return json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
-
+    return json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))      #You'll see the reponse from jira in webhook logs as we triggered the API from there.
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
